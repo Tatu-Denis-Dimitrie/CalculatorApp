@@ -1,7 +1,9 @@
 <h1 align="center">Calculator App in C# with WPF</h1>  
-<h3 align="center"> This C# project is a feature-rich calculator application that supports both standard and programmer modes. The application provides a variety of mathematical operations and memory functions, making it a versatile tool for different calculation needs.
+<h3 align="center"> 
+This C# project is a feature-rich calculator application that supports both standard and programmer modes. The application provides a variety of mathematical operations and memory functions, making it a versatile tool for different calculation needs.
+
 **Features:**
- ✔ Standard and programmer modes for diverse calculation requirements.
+✔ Standard and programmer modes for diverse calculation requirements.
 ✔ Digit grouping toggle for better readability of large numbers.
 ✔ Memory functions including add, recall, clear, and save.
 ✔ Supports basic arithmetic operations: addition, subtraction, multiplication, and division.
@@ -10,6 +12,7 @@
 ✔ Clipboard operations: cut, copy, and paste.
 ✔ User-friendly interface with commands for easy interaction.
 ✔ Configuration settings saved and loaded from a file for persistent user preferences.
+
 Commands:
 •	NumberCommand: Enter numbers.
 •	ToggleDigitGroupingCommand: Toggle digit grouping.
