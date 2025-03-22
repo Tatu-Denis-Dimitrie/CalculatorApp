@@ -1,0 +1,364 @@
+﻿<Window x:Class="CalculatorApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CalculatorApp"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="325" Background="#2a2a2a" ResizeMode="NoResize"
+        KeyDown="Window_KeyDown">
+    <Window.Resources>
+
+        <local:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <!--Stilul pentru butoane-->
+        <Style x:Key="RoundedButtonStyleNumeric" TargetType="Button">
+            <Setter Property="Background" Value="#454545"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#404040"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="10"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="1"
+                                CornerRadius="7">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                             VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <!--Efect la apasare-->
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#404040"/>
+                </Trigger>
+            </Style.Triggers>
+
+        </Style>
+        <Style x:Key="RoundedButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#282828"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#404040"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="10"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="1"
+                        CornerRadius="7">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <!--Efect la apasare-->
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#404040"/>
+                </Trigger>
+            </Style.Triggers>
+
+        </Style>
+        <!--Stilul pt meniul ptr help etc TO DO-->
+        <Style x:Key="MenuItemStyle" TargetType="MenuItem">
+            <Setter Property="Background" Value="#282828"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#404040"/>
+            <Setter Property="BorderThickness" Value="0.1"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+
+    </Window.Resources>
+
+    <Grid Margin="0,0,10,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="71*"/>
+            <RowDefinition Height="146*"/>
+        </Grid.RowDefinitions>
+        
+        <!-- Butonul Hamburger (3 liniute) -->
+        <Button x:Name="HamburgerButton"
+            Content="☰" 
+            Style="{StaticResource RoundedButtonStyle}"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Margin="10,10,0,0"
+            Command="{Binding ShowMenu}"
+            FontSize="32"
+            BorderBrush="Transparent"
+            Width="47"
+            Height="49"
+            Padding="0"/>
+
+        <!-- TextBox cu textul "Standard" -->
+        <TextBlock Text="{Binding CurrentMode}"
+              HorizontalAlignment="Left"
+              Margin="62,20,0,0"
+              FontSize="20"
+              Foreground="White"
+              FontWeight="Bold"
+              VerticalAlignment="Top" Height="31" Width="120"/>
+
+
+
+        <!--Display ul-->
+        <TextBox Text="{Binding Display, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 FontSize="36" VerticalAlignment="Top"
+                 Height="50" Margin="10,71,25,0" TextAlignment="Right" IsReadOnly="True" Background="#2a2a2a" Foreground="White" BorderThickness="0"
+        />
+       
+        <!--Butoanele-->
+        <Grid Margin="10,-15,10,0" VerticalAlignment="Top" Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Row="0" Grid.Column="0" Content="CE" Command="{Binding CE}" Style="{StaticResource RoundedButtonStyle}" Visibility="{Binding IsStandardModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="0" Grid.Column="1" Content="C" Command="{Binding C}" Style="{StaticResource RoundedButtonStyle}" Visibility="{Binding IsStandardModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="0" Grid.Column="2" Content="%" Command="{Binding Mod}" Style="{StaticResource RoundedButtonStyle}" Visibility="{Binding IsStandardModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="0" Grid.Column="3" Content="⌫" Command="{Binding DeleteLastChar}" Style="{StaticResource RoundedButtonStyle}" Visibility="{Binding IsStandardModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="0" Grid.Column="4" Content="MC" Command="{Binding MemoryClear}" Style="{StaticResource RoundedButtonStyle}" Visibility="{Binding IsStandardModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+            <Button Grid.Row="1" Grid.Column="0" Content="+/-" Command="{Binding Negation}" Style="{StaticResource RoundedButtonStyle}" Visibility="{Binding IsStandardModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="1" Grid.Column="1" Content="√" Command="{Binding SquareRootCommand}" Style="{StaticResource RoundedButtonStyle}" Visibility="{Binding IsStandardModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="1" Grid.Column="2" Content="x²" Command="{Binding SquareCommand}" Style="{StaticResource RoundedButtonStyle}" Visibility="{Binding IsStandardModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="1" Grid.Column="3" Content="1/x" Command="{Binding ReciprocalCommand}" Style="{StaticResource RoundedButtonStyle}" Visibility="{Binding IsStandardModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="1" Grid.Column="4" Content="MR" Command="{Binding MemoryR}" Style="{StaticResource RoundedButtonStyle}" Visibility="{Binding IsStandardModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+            <Button Grid.Row="2" Grid.Column="0" Content="7" Command="{Binding NumberCommand}" CommandParameter="7" Style="{StaticResource RoundedButtonStyleNumeric}" Visibility="{Binding IsStandardModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="2" Grid.Column="1" Content="8" Command="{Binding NumberCommand}" CommandParameter="8" Style="{StaticResource RoundedButtonStyleNumeric}" Visibility="{Binding IsStandardModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="2" Grid.Column="2" Content="9" Command="{Binding NumberCommand}" CommandParameter="9" Style="{StaticResource RoundedButtonStyleNumeric}" Visibility="{Binding IsStandardModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="2" Grid.Column="3" Content="÷" Command="{Binding OperationCommand}" CommandParameter="/" Style="{StaticResource RoundedButtonStyle}" Visibility="{Binding IsStandardModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="2" Grid.Column="4" Content="M+" Command="{Binding MemoryAdd}" Style="{StaticResource RoundedButtonStyle}" Visibility="{Binding IsStandardModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+            <Button Grid.Row="3" Grid.Column="0" Content="4" Command="{Binding NumberCommand}" CommandParameter="4" Style="{StaticResource RoundedButtonStyleNumeric}" Visibility="{Binding IsStandardModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="3" Grid.Column="1" Content="5" Command="{Binding NumberCommand}" CommandParameter="5" Style="{StaticResource RoundedButtonStyleNumeric}" Visibility="{Binding IsStandardModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="3" Grid.Column="2" Content="6" Command="{Binding NumberCommand}" CommandParameter="6" Style="{StaticResource RoundedButtonStyleNumeric}" Visibility="{Binding IsStandardModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="3" Grid.Column="3" Content="×" Command="{Binding OperationCommand}" CommandParameter="*" Style="{StaticResource RoundedButtonStyle}" Visibility="{Binding IsStandardModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="3" Grid.Column="4" Content="M-" Command="{Binding MemoryRemove}" Style="{StaticResource RoundedButtonStyle}" Visibility="{Binding IsStandardModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+            <Button Grid.Row="4" Grid.Column="0" Content="1" Command="{Binding NumberCommand}" CommandParameter="1" Style="{StaticResource RoundedButtonStyleNumeric}" Visibility="{Binding IsStandardModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="4" Grid.Column="1" Content="2" Command="{Binding NumberCommand}" CommandParameter="2" Style="{StaticResource RoundedButtonStyleNumeric}" Visibility="{Binding IsStandardModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="4" Grid.Column="2" Content="3" Command="{Binding NumberCommand}" CommandParameter="3" Style="{StaticResource RoundedButtonStyleNumeric}" Visibility="{Binding IsStandardModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="4" Grid.Column="3" Content="-" Command="{Binding OperationCommand}" CommandParameter="-" Style="{StaticResource RoundedButtonStyle}" Visibility="{Binding IsStandardModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="4" Grid.Column="4" Content="MS" Command="{Binding MemorySave}" Style="{StaticResource RoundedButtonStyle}" Visibility="{Binding IsStandardModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+            <Button Grid.Row="5" Grid.Column="0" Content="," Command="{Binding DecimalCommand}" CommandParameter="." Style="{StaticResource RoundedButtonStyle}" Visibility="{Binding IsStandardModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="5" Grid.Column="1" Content="0" Command="{Binding NumberCommand}" CommandParameter="0" Style="{StaticResource RoundedButtonStyleNumeric}" Visibility="{Binding IsStandardModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="5" Grid.Column="2" Content="=" Command="{Binding EqualsCommand}" Style="{StaticResource RoundedButtonStyle}" Visibility="{Binding IsStandardModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="5" Grid.Column="3" Content="+" Command="{Binding OperationCommand}" CommandParameter="+" Style="{StaticResource RoundedButtonStyle}" Visibility="{Binding IsStandardModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="5" Grid.Column="4" Content="M^" Command="{Binding ShowMemoryStack}" Style="{StaticResource RoundedButtonStyle}" Visibility="{Binding IsStandardModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/> 
+        </Grid>
+        <Grid Visibility="{Binding IsProgrammerMode, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="10,-15,10,0" VerticalAlignment="Top" Grid.Row="1">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Row="0" Grid.ColumnSpan="5" 
+      HorizontalAlignment="Left"
+      Visibility="{Binding IsProgrammerModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- HEX -->
+                <Button Grid.Row="0" Grid.Column="0" Content="HEX" BorderBrush="Transparent" Command="{Binding SelectHexCommand}" 
+            Style="{StaticResource RoundedButtonStyle}" Margin="0,5"/>
+                <TextBlock Grid.Row="0" Grid.Column="1" Foreground="White" Text="{Binding HexDisplay}" VerticalAlignment="Center" Margin="5,0"/>
+
+                <!-- DEC -->
+                <Button Grid.Row="1" Grid.Column="0" Content="DEC" BorderBrush="Transparent" Command="{Binding SelectDecCommand}" 
+            Style="{StaticResource RoundedButtonStyle}" Margin="0,5"/>
+                <TextBlock Grid.Row="1" Grid.Column="1" Foreground="White" Text="{Binding DecDisplay}" VerticalAlignment="Center" Margin="5,0"/>
+
+                <!-- OCT -->
+                <Button Grid.Row="2" Grid.Column="0" Content="OCT" BorderBrush="Transparent" Command="{Binding SelectOctCommand}" 
+            Style="{StaticResource RoundedButtonStyle}" Margin="0,5"/>
+                <TextBlock Grid.Row="2" Grid.Column="1" Foreground="White" Text="{Binding OctDisplay}" VerticalAlignment="Center" Margin="5,0"/>
+
+                <!-- BIN -->
+                <Button Grid.Row="3" Grid.Column="0" Content="BIN" BorderBrush="Transparent" Command="{Binding SelectBinCommand}" 
+            Style="{StaticResource RoundedButtonStyle}" Margin="0,5"/>
+                <TextBlock Grid.Row="3" Grid.Column="1" Foreground="White" Text="{Binding BinDisplay}" VerticalAlignment="Center" Margin="5,0"/>
+            </Grid>
+            
+            <Button Grid.Row="1" Grid.Column="0" Content="A"  Command="{Binding CharacterCommand}" CommandParameter="A" Style="{StaticResource RoundedButtonStyleNumeric}" Visibility="{Binding IsProgrammerModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="1" Grid.Column="1" Content="&lt;&lt;" Command="{Binding ShiftLeftCommand}" Style="{StaticResource RoundedButtonStyle}" Visibility="{Binding IsProgrammerModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="1" Grid.Column="2" Content="&gt;&gt;" Command="{Binding ShiftRightCommand}" Style="{StaticResource RoundedButtonStyle}" Visibility="{Binding IsProgrammerModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="1" Grid.Column="3" Content="C" Command="{Binding CommandC}" Style="{StaticResource RoundedButtonStyle}" Visibility="{Binding IsProgrammerModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="1" Grid.Column="4" Content="⌫" Command="{Binding DeleteCommand}" Style="{StaticResource RoundedButtonStyle}" Visibility="{Binding IsProgrammerModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+            <Button Grid.Row="2" Grid.Column="0" Content="B" Command="{Binding CharacterCommand}" CommandParameter="B" Style="{StaticResource RoundedButtonStyleNumeric}" Visibility="{Binding IsProgrammerModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="2" Grid.Column="1" Content="(" Command="{Binding OpenParenthesisCommand}" Style="{StaticResource RoundedButtonStyle}" Visibility="{Binding IsProgrammerModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="2" Grid.Column="2" Content=")" Command="{Binding CloseParenthesisCommand}" Style="{StaticResource RoundedButtonStyle}" Visibility="{Binding IsProgrammerModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="2" Grid.Column="3" Content="%" Command="{Binding ModuloCommand}" Style="{StaticResource RoundedButtonStyle}" Visibility="{Binding IsProgrammerModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="2" Grid.Column="4" Content="÷" Command="{Binding DivideCommand}" Style="{StaticResource RoundedButtonStyle}" Visibility="{Binding IsProgrammerModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+            <Button Grid.Row="3" Grid.Column="0" Content="C" Command="{Binding CharacterCommand}" CommandParameter="C" Style="{StaticResource RoundedButtonStyleNumeric}" Visibility="{Binding IsProgrammerModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="3" Grid.Column="1" Content="7" Command="{Binding NumberCommandProg}" CommandParameter="7" Style="{StaticResource RoundedButtonStyleNumeric}" Visibility="{Binding IsProgrammerModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="3" Grid.Column="2" Content="8" Command="{Binding NumberCommandProg}" CommandParameter= "8" Style="{StaticResource RoundedButtonStyleNumeric}" Visibility="{Binding IsProgrammerModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="3" Grid.Column="3" Content="9" Command="{Binding NumberCommandProg}" CommandParameter="9" Style="{StaticResource RoundedButtonStyleNumeric}" Visibility="{Binding IsProgrammerModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="3" Grid.Column="4" Content="×" Command="{Binding MultiplyCommand}" Style="{StaticResource RoundedButtonStyle}" Visibility="{Binding IsProgrammerModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+            <Button Grid.Row="4" Grid.Column="0" Content="D" Command="{Binding CharacterCommand}" CommandParameter="D" Style="{StaticResource RoundedButtonStyleNumeric}" Visibility="{Binding IsProgrammerModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="4" Grid.Column="1" Content="4" Command="{Binding NumberCommandProg}" CommandParameter="4" Style="{StaticResource RoundedButtonStyleNumeric}" Visibility="{Binding IsProgrammerModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="4" Grid.Column="2" Content="5" Command="{Binding NumberCommandProg}" CommandParameter="5" Style="{StaticResource RoundedButtonStyleNumeric}" Visibility="{Binding IsProgrammerModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="4" Grid.Column="3" Content="6" Command="{Binding NumberCommandProg}" CommandParameter="6" Style="{StaticResource RoundedButtonStyleNumeric}" Visibility="{Binding IsProgrammerModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="4" Grid.Column="4" Content="-" Command="{Binding SubtractCommand}" Style="{StaticResource RoundedButtonStyle}" Visibility="{Binding IsProgrammerModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+            <Button Grid.Row="5" Grid.Column="0" Content="E" Command="{Binding CharacterCommand}" CommandParameter="E" Style="{StaticResource RoundedButtonStyleNumeric}" Visibility="{Binding IsProgrammerModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="5" Grid.Column="1" Content="1" Command="{Binding NumberCommandProg}" CommandParameter="1" Style="{StaticResource RoundedButtonStyleNumeric}" Visibility="{Binding IsProgrammerModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="5" Grid.Column="2" Content="2" Command="{Binding NumberCommandProg}" CommandParameter="2" Style="{StaticResource RoundedButtonStyleNumeric}" Visibility="{Binding IsProgrammerModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="5" Grid.Column="3" Content="3" Command="{Binding NumberCommandProg}" CommandParameter="3" Style="{StaticResource RoundedButtonStyleNumeric}" Visibility="{Binding IsProgrammerModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="5" Grid.Column="4" Content="+" Command="{Binding AddCommand}" Style="{StaticResource RoundedButtonStyle}" Visibility="{Binding IsProgrammerModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+            <Button Grid.Row="6" Grid.Column="0" Content="F" Command="{Binding CharacterCommand}" CommandParameter="F" Style="{StaticResource RoundedButtonStyleNumeric}" Visibility="{Binding IsProgrammerModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="6" Grid.Column="1" Content="+/-" Command="{Binding ToggleSignCommand}" Style="{StaticResource RoundedButtonStyle}" Visibility="{Binding IsProgrammerModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="6" Grid.Column="2" Content="0" Command="{Binding NumberCommandProg}" CommandParameter="0" Style="{StaticResource RoundedButtonStyleNumeric}" Visibility="{Binding IsProgrammerModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="6" Grid.Column="3" Content="," Command="{Binding DecimalCommandProg}" CommandParameter="," Style="{StaticResource RoundedButtonStyle}" Visibility="{Binding IsProgrammerModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Grid.Row="6" Grid.Column="4" Content="=" Command="{Binding EqualsCommandProg}" Style="{StaticResource RoundedButtonStyle}" Visibility="{Binding IsProgrammerModeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+        </Grid>
+
+
+        <!--Panelul de memorie-->
+        <Border Background="#E6252525" Width="150" CornerRadius="10"
+        HorizontalAlignment="Left" Padding="10"
+        Visibility="{Binding IsMemoryPanelVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+        Margin="140,10,0,10" Grid.RowSpan="2">
+            <Border.Effect>
+                <DropShadowEffect Color="Black" Opacity="0.5" BlurRadius="8"/>
+            </Border.Effect>
+
+            <StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                    <Button Content="X" Width="30" Height="30" 
+                    Background="Transparent" Foreground="White" BorderBrush="Transparent" 
+                    FontSize="16" FontWeight="Bold" Command="{Binding CloseMemoryPanelCommand}" 
+                    HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,10,0"/>
+
+                    <TextBlock Text="Memorie" Foreground="White" FontSize="16" 
+                       FontWeight="Bold" VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <ListBox ItemsSource="{Binding MemoryStack}" 
+                 SelectedItem="{Binding SelectedMemoryValue, Mode=TwoWay}"
+                 Background="#333333" Foreground="White"
+                 BorderThickness="0" Padding="5"
+                 ScrollViewer.VerticalScrollBarVisibility="Auto"
+                 HorizontalAlignment="Stretch">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding .}" 
+                               Background="#444" Foreground="White"
+                               Padding="5"
+                               FontSize="14" VerticalAlignment="Center"
+                               Margin="2,2,2,2"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </StackPanel>
+        </Border>
+
+        <Border Background="#F2252525" Width="160" CornerRadius="10"
+        HorizontalAlignment="Left" Padding="10"
+        Visibility="{Binding IsMenuVisible, Converter={StaticResource BooleanToVisibilityConverter}}" Grid.RowSpan="2">
+            <Border.Effect>
+                <DropShadowEffect Color="Black" Opacity="0.5" BlurRadius="8"/>
+            </Border.Effect>
+
+            <StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Height="50" Width="139">
+
+                    <Button x:Name="HamburgerButtonMenu"
+                        Content="☰" 
+                        Style="{StaticResource RoundedButtonStyle}"
+                        Command="{Binding CloseMenuCommand}"
+                        FontSize="32"
+                        BorderBrush="Transparent"
+                        Width="47"
+                        Height="49"
+                        Padding="0"
+                            />
+                    <TextBlock Text=" Meniu"
+                      FontSize="20"
+                      Foreground="White"
+                      FontWeight="Bold"
+                      Height="26" Width="116"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Vertical" Margin="0,125,0,0">
+                    <Button Content="Standard" BorderBrush="Transparent" Height="25" Style="{StaticResource RoundedButtonStyle}" Command="{Binding SwitchToStandardCommand}"/>
+                    <Button Content="Programmer" BorderBrush="Transparent" Height="25" Style="{StaticResource RoundedButtonStyle}" Command="{Binding SwitchToProgrammerCommand}"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom">
+                    <Menu BorderBrush="Transparent" Background="#F2252525">
+                        <MenuItem Header="Help" Style="{StaticResource MenuItemStyle}" BorderBrush="Transparent" Background="#F2252525" Width="40" VerticalAlignment="Bottom" Click="MenuItem_Click" Margin="10,0,20,0">
+                            <MenuItem.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </ItemsPanelTemplate>
+                            </MenuItem.ItemsPanel>
+                            <MenuItem Header="About" BorderBrush="Transparent" Command="{Binding AboutMenuItem_Click}" Style="{StaticResource MenuItemStyle}" />
+                        </MenuItem>
+                        <MenuItem Header="File" Style="{StaticResource MenuItemStyle}" BorderBrush="Transparent" Background="#F2252525" Width="40" VerticalAlignment="Bottom" Click="MenuItem_Click" Margin="20,0,10,0">
+                            <MenuItem.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </ItemsPanelTemplate>
+                            </MenuItem.ItemsPanel>
+                            <MenuItem Header="Cut" BorderBrush="Transparent" Command="{Binding CutCommand}" Style="{StaticResource MenuItemStyle}" />
+                            <MenuItem Header="Copy" BorderBrush="Transparent" Command="{Binding CopyCommand}" Style="{StaticResource MenuItemStyle}" />
+                            <MenuItem Header="Paste" BorderBrush="Transparent" Command="{Binding PasteCommand}" Style="{StaticResource MenuItemStyle}" />
+                            <MenuItem Header="Digit Grouping" BorderBrush="Transparent" Command="{Binding ToggleDigitGroupingCommand}" Style="{StaticResource MenuItemStyle}" />
+                        </MenuItem>
+                    </Menu>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>
